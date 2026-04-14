@@ -1,0 +1,201 @@
+name,gender,age,ethnicity,years_experience,education_level,skills,previous_companies,hired
+Devon Carter,Male,36,Black,7.1,Master,Communication | Risk Modeling | TensorFlow,Northbridge Labs,1
+Natalie Walker,Female,48,White,12.3,Bachelor,AWS | JavaScript | Python,Verity Analytics,1
+Charlotte Anderson,Female,27,White,0.7,Bachelor,AWS | Experimentation | SQL,Clearwater AI,1
+Charlotte Cooper,Female,34,White,7.1,Master,Docker | Recruiting Analytics | SQL,OakRiver Consulting,0
+Karan Tanaka,Male,45,Asian,7.7,Master,Data Analysis | Risk Modeling | TensorFlow,Cobalt Data,1
+Natalie Walker,Female,42,White,11.9,Master,React | Recruiting Analytics | SQL,Clearwater AI | Summit Works,1
+Elena Hernandez,Female,53,Hispanic,8.9,Bachelor,AWS | NLP | Recruiting Analytics,Verity Analytics | Clearwater AI,1
+Miguel Martinez,Male,25,Hispanic,5.2,Master,Communication | Data Analysis | NLP,Clearwater AI,0
+Adriana Garcia,Female,29,Hispanic,2.0,Bachelor,Docker | Kubernetes | PyTorch,Cobalt Data | Lighthouse Health,1
+Kiara Harris,Female,54,Black,10.9,PhD,Docker | Leadership | Prompt Engineering,Acorn Energy,0
+Kavya Chen,Female,42,Asian,7.6,Bachelor,Docker | Recruiting Analytics | SQL,Apex Insight,1
+Sanjay Tanaka,Male,30,Asian,3.9,Master,AWS | Data Analysis | Risk Modeling,Meridian Cloud | Beacon Talent,1
+Sakura Watanabe,Female,55,Asian,12.4,High School,JavaScript | Python | Risk Modeling,OakRiver Consulting,1
+Jamal Jackson,Male,43,Black,9.8,High School,AWS | Recruiting Analytics | Tableau,Beacon Talent,1
+Mariana Hernandez,Female,52,Hispanic,13.6,High School,Communication | MLOps | React,Lighthouse Health | Helio Systems,0
+Rafael Torres,Male,28,Hispanic,1.4,Bachelor,Experimentation | Leadership | Risk Modeling,Verity Analytics,1
+Aisha Watanabe,Female,28,Asian,12.3,Master,Data Analysis | Recruiting Analytics | TensorFlow,Pioneer Software | Beacon Talent,1
+Yuki Chen,Male,46,Asian,13.6,Bachelor,Communication | Docker | Experimentation,BrightPath Retail | Meridian Cloud,1
+Adriana Garcia,Female,42,Hispanic,12.0,Bachelor,Data Analysis | Prompt Engineering | SQL,Cobalt Data,1
+Hannah Anderson,Female,37,White,7.9,Bachelor,Communication | SQL | TensorFlow,Summit Works | Meridian Cloud,0
+Hiro Nguyen,Male,51,Asian,10.8,High School,Experimentation | JavaScript | PyTorch,Beacon Talent,1
+Olivia Walker,Female,45,White,14.1,Bachelor,Docker | Experimentation | Risk Modeling,Beacon Talent,1
+Nia Lewis,Female,29,Black,6.7,High School,Docker | Kubernetes | Leadership,Summit Works,0
+Emily Anderson,Female,49,White,9.0,Master,Kubernetes | Python | SQL,Summit Works,1
+Kavya Chen,Female,29,Asian,8.2,PhD,MLOps | Risk Modeling | SQL,Verity Analytics,1
+Mei Sharma,Female,35,Asian,8.3,Master,MLOps | PyTorch | Risk Modeling,BrightPath Retail | OakRiver Consulting,0
+Isabella Garcia,Female,33,Hispanic,4.8,PhD,AWS | Data Analysis | Recruiting Analytics,Clearwater AI,0
+Miguel Torres,Male,41,Hispanic,6.1,Master,Python | React | Recruiting Analytics,Clearwater AI,1
+Lucia Torres,Female,54,Hispanic,7.9,Bachelor,AWS | PyTorch | Python,Summit Works,1
+Elijah Davis,Male,54,Black,18.2,High School,AWS | JavaScript | Leadership,Verity Analytics,1
+Daniela Torres,Female,49,Hispanic,15.2,Bachelor,Docker | Kubernetes | PyTorch,Verity Analytics | Nova Finance,1
+Matthew Parker,Male,33,White,6.7,Bachelor,Docker | Product Sense | Risk Modeling,Atlas Dynamics,1
+Sakura Watanabe,Female,50,Asian,10.5,Bachelor,Data Analysis | Docker | TensorFlow,Apex Insight | OakRiver Consulting,0
+James Miller,Male,37,White,7.4,PhD,Experimentation | React | TensorFlow,Meridian Cloud | Clearwater AI,1
+Emily Anderson,Female,49,White,12.7,Master,Experimentation | Risk Modeling | SQL,BlueOrbit Health,1
+Adriana Rivera,Female,42,Hispanic,13.4,PhD,Communication | Experimentation | Prompt Engineering,Cobalt Data | Pioneer Software,1
+Brianna Price,Female,53,Black,12.0,High School,AWS | Docker | Recruiting Analytics,Nova Finance | Apex Insight,1
+Abigail Anderson,Female,48,White,9.9,Bachelor,Communication | Experimentation | Risk Modeling,Meridian Cloud,0
+Mei Zhang,Female,46,Asian,4.3,Bachelor,Communication | Product Sense | Risk Modeling,Pioneer Software,1
+Karan Iyer,Male,32,Asian,5.5,Master,NLP | Python | Risk Modeling,Northbridge Labs | Apex Insight,1
+James Mitchell,Male,46,White,9.2,Bachelor,AWS | Communication | Product Sense,Apex Insight | Pioneer Software,1
+Sakura Kim,Female,26,Asian,4.6,Master,Python | Recruiting Analytics | SQL,Northbridge Labs,0
+William Cooper,Male,35,White,3.9,Bachelor,Data Analysis | PyTorch | React,BlueOrbit Health | Northbridge Labs,0
+Zaria Davis,Female,34,Black,5.9,High School,Docker | PyTorch | Recruiting Analytics,Helio Systems,0
+Sanjay Sharma,Male,22,Asian,3.3,High School,Experimentation | MLOps | NLP,Cobalt Data | Terrace Logistics,0
+Natalie Collins,Female,51,White,8.7,Bachelor,AWS | JavaScript | Kubernetes,Apex Insight,1
+Leena Zhang,Female,46,Asian,8.9,Bachelor,Leadership | MLOps | Tableau,Nova Finance | Summit Works,0
+Malik Price,Male,34,Black,8.1,High School,Communication | Risk Modeling | Tableau,Pioneer Software,0
+Aisha Nguyen,Female,36,Asian,4.7,Master,MLOps | Risk Modeling | Tableau,Verity Analytics | Nova Finance,1
+Jin Patel,Male,34,Asian,6.6,Bachelor,Data Analysis | Leadership | Risk Modeling,Pioneer Software,1
+Naomi Lewis,Female,28,Black,4.0,Bachelor,Docker | Python | Risk Modeling,Summit Works,1
+Michael Collins,Male,28,White,1.0,Master,Docker | JavaScript | Tableau,Lighthouse Health | Nova Finance,1
+Grace Anderson,Female,26,White,1.3,Master,JavaScript | NLP | SQL,Apex Insight | OakRiver Consulting,1
+Naomi Carter,Female,55,Black,14.9,Bachelor,Communication | Docker | Experimentation,Helio Systems | BlueOrbit Health,0
+William Thompson,Male,37,White,7.2,High School,Docker | Experimentation | Tableau,OakRiver Consulting,1
+Olivia Walker,Female,38,White,8.1,Master,Communication | JavaScript | Leadership,Beacon Talent,1
+Michael Anderson,Male,25,White,2.8,Master,Docker | Experimentation | JavaScript,Lighthouse Health,1
+Kiara Price,Female,53,Black,15.4,Bachelor,Communication | React | SQL,Summit Works | Northbridge Labs,1
+Gabriela Rivera,Female,23,Hispanic,4.7,Bachelor,Data Analysis | SQL | Tableau,Summit Works | Cobalt Data,0
+Aisha Watanabe,Female,44,Asian,9.6,Bachelor,Data Analysis | Kubernetes | PyTorch,Verity Analytics | Pioneer Software,1
+Adriana Garcia,Female,51,Hispanic,14.3,High School,Product Sense | Prompt Engineering | Python,Verity Analytics | Helio Systems,1
+Jiwoo Chen,Female,35,Asian,6.9,Bachelor,Docker | Experimentation | NLP,BlueOrbit Health | Northbridge Labs,0
+Darius Lewis,Male,22,Black,0,PhD,Experimentation | PyTorch | React,Pioneer Software,0
+Hannah Collins,Female,52,White,12.6,Bachelor,NLP | Product Sense | Risk Modeling,Terrace Logistics,0
+Matthew Turner,Male,54,White,13.8,Master,JavaScript | React | Tableau,Lighthouse Health,1
+Kavya Iyer,Female,51,Asian,12.8,PhD,Leadership | Product Sense | Recruiting Analytics,Verity Analytics,1
+Zaria Davis,Female,31,Black,3.5,Bachelor,JavaScript | Kubernetes | PyTorch,BlueOrbit Health | Terrace Logistics,0
+Michael Anderson,Male,52,White,13.0,Master,AWS | Kubernetes | Product Sense,Nova Finance,0
+Carlos Morales,Male,24,Hispanic,0,Master,Docker | Recruiting Analytics | TensorFlow,BlueOrbit Health | Beacon Talent,0
+Aaliyah Johnson,Female,25,Black,0.4,Bachelor,Communication | MLOps | NLP,Terrace Logistics,0
+Darius Robinson,Male,46,Black,9.1,PhD,Experimentation | NLP | Recruiting Analytics,Lighthouse Health | Summit Works,0
+Javier Castillo,Male,32,Hispanic,3.3,High School,Docker | JavaScript | MLOps,Summit Works | Lighthouse Health,0
+Joseph Anderson,Male,37,White,4.9,Bachelor,Docker | Product Sense | Python,Northbridge Labs | Helio Systems,0
+Brianna Carter,Female,44,Black,11.3,Bachelor,AWS | Leadership | NLP,Helio Systems,1
+Priya Patel,Female,40,Asian,6.7,Bachelor,MLOps | Prompt Engineering | Risk Modeling,Cobalt Data | Summit Works,0
+Lucia Torres,Female,29,Hispanic,5.7,Bachelor,NLP | Recruiting Analytics | TensorFlow,Beacon Talent | Acorn Energy,1
+Arjun Watanabe,Male,45,Asian,8.3,Bachelor,MLOps | PyTorch | Recruiting Analytics,Northbridge Labs | Nova Finance,0
+Joseph Mitchell,Male,48,White,7.9,High School,Docker | React | SQL,BlueOrbit Health | Beacon Talent,1
+Karan Choi,Male,48,Asian,7.8,Master,Communication | PyTorch | Tableau,Helio Systems | Acorn Energy,1
+Karan Patel,Male,45,Asian,7.9,Bachelor,MLOps | Product Sense | SQL,Meridian Cloud | BlueOrbit Health,0
+Luis Rivera,Male,23,Hispanic,3.1,PhD,JavaScript | Leadership | TensorFlow,Meridian Cloud,0
+Claire Miller,Female,39,White,8.3,Master,NLP | React | Risk Modeling,Cobalt Data | BlueOrbit Health,0
+Christopher Cooper,Male,42,White,10.9,High School,Communication | Prompt Engineering | PyTorch,Pioneer Software,1
+Jiwoo Choi,Female,36,Asian,6.5,PhD,Docker | Prompt Engineering | SQL,Northbridge Labs | Helio Systems,0
+Diego Morales,Male,50,Hispanic,13.1,Bachelor,AWS | NLP | TensorFlow,Clearwater AI | Terrace Logistics,1
+Arjun Choi,Male,35,Asian,6.4,Bachelor,Communication | Kubernetes | Recruiting Analytics,Clearwater AI | Verity Analytics,0
+Min Sharma,Male,31,Asian,3.1,High School,Communication | React | TensorFlow,Acorn Energy,0
+Kavya Choi,Female,43,Asian,6.5,Master,Communication | MLOps | React,Atlas Dynamics,0
+Ananya Tanaka,Female,52,Asian,13.2,Master,AWS | MLOps | PyTorch,Verity Analytics,0
+Gabriela Castillo,Female,23,Hispanic,2.1,Bachelor,AWS | Data Analysis | Python,Atlas Dynamics | Nova Finance,1
+Matthew Anderson,Male,31,White,3.8,High School,Leadership | Product Sense | Prompt Engineering,Lighthouse Health | Nova Finance,1
+Kenji Zhang,Male,27,Asian,0,Master,Data Analysis | NLP | SQL,Summit Works,1
+Nina Nguyen,Female,35,Asian,5.9,Bachelor,Docker | JavaScript | Tableau,Helio Systems | OakRiver Consulting,1
+Devon Carter,Male,30,Black,2.5,Master,Docker | Kubernetes | PyTorch,Pioneer Software,0
+Christopher Bennett,Male,44,White,14.3,High School,Experimentation | Python | TensorFlow,Verity Analytics | Clearwater AI,1
+Wei Sharma,Male,32,Asian,6.9,Master,Experimentation | MLOps | React,Verity Analytics,0
+Natalie Anderson,Female,47,White,13.9,Bachelor,Data Analysis | Prompt Engineering | TensorFlow,Terrace Logistics,0
+Santiago Hernandez,Male,28,Hispanic,0,High School,Data Analysis | Leadership | NLP,Cobalt Data,0
+Xavier Fields,Male,50,Black,9.9,Master,JavaScript | Kubernetes | React,Lighthouse Health,1
+Min Zhang,Male,25,Asian,0,Bachelor,Docker | Experimentation | TensorFlow,Helio Systems | Beacon Talent,1
+Olivia Cooper,Female,54,White,11.3,PhD,Experimentation | Leadership | SQL,Pioneer Software | Terrace Logistics,1
+Daniel Anderson,Male,54,White,16.1,Master,Experimentation | Recruiting Analytics | SQL,Terrace Logistics | Beacon Talent,1
+Nina Iyer,Female,43,Asian,8.9,Master,Kubernetes | React | TensorFlow,Beacon Talent,0
+Claire Thompson,Female,43,White,8.5,High School,Docker | MLOps | NLP,BrightPath Retail | Apex Insight,1
+Priya Choi,Female,27,Asian,0.9,Bachelor,Data Analysis | Docker | MLOps,Nova Finance,0
+Hiro Tanaka,Male,26,Asian,0,Bachelor,Prompt Engineering | PyTorch | Risk Modeling,Nova Finance,0
+Nia Harris,Female,33,Black,7.2,Master,Data Analysis | Experimentation | SQL,Acorn Energy | OakRiver Consulting,0
+Maya Carter,Female,37,Black,2.8,Bachelor,Leadership | MLOps | Tableau,Lighthouse Health | Atlas Dynamics,0
+Hiro Kim,Male,30,Asian,4.4,Bachelor,MLOps | PyTorch | Risk Modeling,Atlas Dynamics,1
+Ryan Thompson,Male,49,White,11.2,High School,Experimentation | MLOps | Recruiting Analytics,Verity Analytics,1
+Arjun Sharma,Male,36,Asian,12.2,Master,JavaScript | Kubernetes | NLP,Atlas Dynamics,0
+Jiwoo Watanabe,Female,22,Asian,1.5,PhD,AWS | Leadership | Python,Beacon Talent,0
+Devon Carter,Male,41,Black,9.8,Master,Experimentation | React | TensorFlow,Pioneer Software,0
+Christopher Thompson,Male,40,White,9.3,Bachelor,MLOps | React | Recruiting Analytics,Cobalt Data | Apex Insight,1
+Kavya Choi,Female,54,Asian,11.4,Bachelor,AWS | MLOps | Product Sense,Acorn Energy,0
+Aisha Zhang,Female,43,Asian,8.4,High School,Kubernetes | MLOps | Risk Modeling,Lighthouse Health,0
+Hiro Patel,Male,51,Asian,14.3,Master,Docker | Kubernetes | SQL,Beacon Talent | Pioneer Software,1
+Elijah Jackson,Male,43,Black,9.6,Bachelor,Communication | MLOps | Product Sense,Clearwater AI | Nova Finance,0
+Sanjay Nguyen,Male,27,Asian,2.4,Bachelor,Data Analysis | Docker | Risk Modeling,BlueOrbit Health | Apex Insight,1
+Matthew Thompson,Male,50,White,11.1,Bachelor,Communication | MLOps | SQL,Helio Systems | Apex Insight,1
+Hiro Chen,Male,31,Asian,6.5,Bachelor,NLP | Recruiting Analytics | TensorFlow,Acorn Energy | Clearwater AI,0
+Joseph Turner,Male,45,White,6.9,Bachelor,JavaScript | NLP | TensorFlow,Clearwater AI | Nova Finance,1
+Michael Collins,Male,55,White,11.7,Bachelor,AWS | Experimentation | Leadership,Pioneer Software | Meridian Cloud,1
+Miguel Martinez,Male,42,Hispanic,11.0,Master,JavaScript | Risk Modeling | TensorFlow,Atlas Dynamics | Cobalt Data,0
+Elena Castillo,Female,36,Hispanic,7.6,High School,MLOps | Python | Tableau,Lighthouse Health | BrightPath Retail,0
+Joseph Bennett,Male,48,White,12.5,Master,JavaScript | NLP | TensorFlow,Apex Insight | Lighthouse Health,1
+Sanjay Zhang,Male,33,Asian,5.2,Bachelor,Prompt Engineering | PyTorch | SQL,Atlas Dynamics,1
+Sakura Choi,Female,40,Asian,6.6,Master,AWS | Leadership | Risk Modeling,BrightPath Retail | Atlas Dynamics,0
+Claire Cooper,Female,31,White,5.9,PhD,JavaScript | Kubernetes | SQL,Apex Insight,1
+Jasmine Fields,Female,48,Black,14.5,Bachelor,Python | Risk Modeling | Tableau,Atlas Dynamics | Pioneer Software,1
+Miguel Martinez,Male,25,Hispanic,3.2,Bachelor,Kubernetes | NLP | React,Acorn Energy | Clearwater AI,1
+Sakura Kim,Female,51,Asian,14.9,High School,Experimentation | NLP | Recruiting Analytics,Helio Systems,1
+Ananya Tanaka,Female,42,Asian,12.6,Bachelor,Data Analysis | Prompt Engineering | Tableau,Pioneer Software | Atlas Dynamics,0
+Joseph Walker,Male,35,White,4.2,Bachelor,Docker | React | SQL,Pioneer Software | Atlas Dynamics,1
+Javier Torres,Male,47,Hispanic,9.2,Bachelor,Leadership | MLOps | Risk Modeling,Apex Insight | Clearwater AI,0
+Xavier Fields,Male,29,Black,5.3,High School,MLOps | Product Sense | PyTorch,Beacon Talent | Acorn Energy,0
+Ryan Miller,Male,24,White,5.2,Master,Experimentation | NLP | Prompt Engineering,Nova Finance,0
+Kenji Nguyen,Male,43,Asian,10.2,Bachelor,Prompt Engineering | Risk Modeling | Tableau,Pioneer Software | Northbridge Labs,1
+Naomi Lewis,Female,23,Black,0,Master,JavaScript | React | Recruiting Analytics,Pioneer Software,1
+Zaria Harris,Female,37,Black,5.6,High School,Leadership | PyTorch | Python,Nova Finance | Verity Analytics,1
+Xavier Brooks,Male,25,Black,0.8,Bachelor,Product Sense | Prompt Engineering | Tableau,Cobalt Data | Lighthouse Health,0
+Min Zhang,Male,52,Asian,10.0,Bachelor,AWS | Recruiting Analytics | Risk Modeling,OakRiver Consulting | Atlas Dynamics,1
+Maya Johnson,Female,52,Black,9.5,Master,AWS | Docker | PyTorch,Clearwater AI | Acorn Energy,0
+Javier Martinez,Male,44,Hispanic,14.6,PhD,AWS | Leadership | Tableau,Beacon Talent,1
+Jamal Fields,Male,37,Black,6.9,Bachelor,PyTorch | Recruiting Analytics | SQL,Nova Finance | Pioneer Software,1
+Isaiah Harris,Male,48,Black,15.2,Master,Leadership | React | Tableau,Nova Finance | Atlas Dynamics,0
+Gabriel Hernandez,Male,24,Hispanic,2.6,Master,Data Analysis | Product Sense | SQL,Cobalt Data | Atlas Dynamics,0
+Olivia Turner,Female,40,White,7.1,Bachelor,Prompt Engineering | Risk Modeling | Tableau,Terrace Logistics,0
+Michael Collins,Male,38,White,7.1,Bachelor,Docker | JavaScript | Leadership,Clearwater AI,0
+Arjun Tanaka,Male,30,Asian,3.4,Bachelor,AWS | Python | Recruiting Analytics,OakRiver Consulting | Lighthouse Health,0
+Gabriel Garcia,Male,38,Hispanic,4.9,High School,Docker | Experimentation | PyTorch,Clearwater AI,0
+Lucia Martinez,Female,40,Hispanic,4.7,Bachelor,NLP | React | Recruiting Analytics,BrightPath Retail | Lighthouse Health,0
+Isaiah Brooks,Male,35,Black,6.2,Bachelor,Experimentation | Prompt Engineering | TensorFlow,Apex Insight | BlueOrbit Health,1
+Kenji Choi,Male,31,Asian,0.3,Bachelor,Experimentation | Prompt Engineering | PyTorch,Pioneer Software,1
+Jiwoo Tanaka,Female,54,Asian,11.0,Bachelor,Docker | Product Sense | Python,Northbridge Labs | Meridian Cloud,0
+William Bennett,Male,25,White,3.4,PhD,SQL | Tableau | TensorFlow,Verity Analytics | Cobalt Data,1
+Zaria Johnson,Female,46,Black,5.0,Bachelor,NLP | Risk Modeling | TensorFlow,BlueOrbit Health | Cobalt Data,0
+Jin Chen,Male,23,Asian,2.7,PhD,Communication | Experimentation | Risk Modeling,OakRiver Consulting | Beacon Talent,1
+William Miller,Male,48,White,6.8,Master,Leadership | Recruiting Analytics | TensorFlow,Helio Systems,1
+Jasmine Jackson,Female,47,Black,6.9,Bachelor,Leadership | Risk Modeling | SQL,Terrace Logistics,0
+Claire Turner,Female,42,White,9.3,PhD,Communication | Prompt Engineering | Recruiting Analytics,Summit Works | Helio Systems,0
+Nia Davis,Female,53,Black,18.7,High School,MLOps | Product Sense | Prompt Engineering,Verity Analytics | Beacon Talent,1
+Jiwoo Kim,Female,36,Asian,5.0,Master,Communication | Risk Modeling | SQL,Beacon Talent | Terrace Logistics,1
+William Collins,Male,45,White,14.0,High School,AWS | Leadership | SQL,Helio Systems | Apex Insight,1
+Kiara Carter,Female,52,Black,14.5,Bachelor,JavaScript | Leadership | Python,Pioneer Software,0
+Zaria Carter,Female,42,Black,14.3,Master,Experimentation | Product Sense | Risk Modeling,Atlas Dynamics | Summit Works,1
+Miguel Torres,Male,35,Hispanic,4.0,Bachelor,NLP | Python | Recruiting Analytics,Beacon Talent | Verity Analytics,1
+Nicholas Walker,Male,53,White,15.4,Bachelor,AWS | Kubernetes | Tableau,Lighthouse Health | Cobalt Data,1
+Sanjay Watanabe,Male,33,Asian,7.9,Master,Prompt Engineering | React | SQL,Helio Systems,0
+Ananya Patel,Female,31,Asian,2.6,High School,Experimentation | MLOps | Prompt Engineering,Pioneer Software,0
+Hannah Miller,Female,23,White,0,PhD,Communication | Prompt Engineering | Python,BlueOrbit Health,0
+Kenji Choi,Male,38,Asian,6.8,Master,AWS | Product Sense | TensorFlow,Clearwater AI | Lighthouse Health,1
+Diego Garcia,Male,27,Hispanic,0.4,Bachelor,Data Analysis | Python | TensorFlow,Verity Analytics | Nova Finance,0
+Andres Garcia,Male,36,Hispanic,7.7,Bachelor,AWS | JavaScript | Tableau,Apex Insight,0
+Emily Thompson,Female,42,White,10.6,High School,Docker | Product Sense | TensorFlow,OakRiver Consulting,0
+Adriana Torres,Female,46,Hispanic,10.7,Master,NLP | Prompt Engineering | TensorFlow,Helio Systems | BlueOrbit Health,1
+Gabriel Rivera,Male,47,Hispanic,13.2,Master,Experimentation | Recruiting Analytics | Tableau,Beacon Talent | Clearwater AI,1
+Imani Fields,Female,40,Black,7.5,Master,AWS | React | TensorFlow,Clearwater AI,0
+Tiana Johnson,Female,28,Black,8.2,Bachelor,AWS | NLP | PyTorch,Cobalt Data,0
+Arjun Chen,Male,27,Asian,5.9,Bachelor,Kubernetes | Product Sense | TensorFlow,Atlas Dynamics,1
+Kiara Carter,Female,55,Black,15.5,High School,AWS | Docker | Tableau,Apex Insight,1
+William Turner,Male,38,White,9.4,PhD,Experimentation | Leadership | Tableau,BrightPath Retail,1
+Gabriel Flores,Male,43,Hispanic,6.7,Master,Docker | NLP | React,Meridian Cloud | Pioneer Software,1
+Lucia Morales,Female,37,Hispanic,7.7,Bachelor,AWS | MLOps | Product Sense,Meridian Cloud,0
+Kavya Chen,Female,51,Asian,14.3,Master,Communication | Tableau | TensorFlow,Atlas Dynamics,1
+Zaria Robinson,Female,50,Black,11.6,PhD,JavaScript | Product Sense | Tableau,Beacon Talent | Helio Systems,0
+Kavya Zhang,Female,27,Asian,4.0,Master,Data Analysis | Product Sense | SQL,Verity Analytics | BlueOrbit Health,1
+Ryan Bennett,Male,36,White,7.5,Bachelor,Experimentation | Product Sense | Prompt Engineering,Acorn Energy,0
+Arjun Patel,Male,31,Asian,2.8,Master,MLOps | Prompt Engineering | Tableau,BlueOrbit Health | Lighthouse Health,0
+Wei Patel,Male,23,Asian,2.8,Master,Data Analysis | PyTorch | Recruiting Analytics,Beacon Talent,1
+Ananya Iyer,Female,33,Asian,6.5,Bachelor,Experimentation | Leadership | React,Clearwater AI | Northbridge Labs,0
+Olivia Cooper,Female,28,White,6.4,Master,Data Analysis | MLOps | Risk Modeling,Meridian Cloud | Lighthouse Health,1
+Elijah Fields,Male,46,Black,7.9,Bachelor,Data Analysis | Docker | Experimentation,BrightPath Retail,1
+Daniel Thompson,Male,54,White,11.6,Bachelor,NLP | Product Sense | React,Cobalt Data | Pioneer Software,1
+Nia Price,Female,32,Black,3.2,Bachelor,Experimentation | MLOps | SQL,Pioneer Software,1
+Adriana Morales,Female,48,Hispanic,11.4,Master,Communication | Experimentation | Tableau,Apex Insight,0
+Mateo Ramirez,Male,36,Hispanic,4.8,Bachelor,Prompt Engineering | Risk Modeling | Tableau,BlueOrbit Health,1
+Kavya Chen,Female,50,Asian,11.8,Bachelor,Communication | PyTorch | Recruiting Analytics,Helio Systems | Lighthouse Health,1
+Diego Hernandez,Male,35,Hispanic,7.2,Bachelor,Communication | Data Analysis | React,Meridian Cloud,0
+Adriana Ramirez,Female,32,Hispanic,1.4,Bachelor,AWS | Docker | React,BrightPath Retail,0
