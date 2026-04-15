@@ -1,5 +1,8 @@
-import 'package:fl_chart/fl_chart.dart';
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
+
+import '../theme/app_theme.dart';
 
 class ShapChart extends StatelessWidget {
   const ShapChart({
@@ -11,65 +14,157 @@ class ShapChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final rows = shapValues.take(10).toList(growable: false);
-    if (rows.isEmpty) {
-      return const Center(
-        child: Text('No SHAP values available for this audit.'),
+    final rows = shapValues
+        .map(
+          (row) => {
+            'feature': row['feature']?.toString() ?? 'Unknown feature',
+            'value': (row['value'] as num?)?.toDouble() ??
+                (row['shap_value'] as num?)?.toDouble() ??
+                0.0,
+          },
+        )
+        .toList(growable: false)
+      ..sort((a, b) => (b['value'] as double)
+          .abs()
+          .compareTo((a['value'] as double).abs()));
+
+    final topRows = rows.take(10).toList(growable: false);
+    if (topRows.isEmpty) {
+      return Center(
+        child: Text(
+          'No SHAP values available for this audit.',
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
       );
     }
 
-    return SizedBox(
-      height: 320,
-      child: BarChart(
-        BarChartData(
-          alignment: BarChartAlignment.spaceAround,
-          maxY: rows
-              .map((row) => (row['value'] as num?)?.abs().toDouble() ?? 0)
-              .fold<double>(0, (maxValue, value) => value > maxValue ? value : maxValue) +
-              0.1,
-          barTouchData: BarTouchData(enabled: true),
-          gridData: const FlGridData(show: false),
-          borderData: FlBorderData(show: false),
-          titlesData: FlTitlesData(
-            topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                getTitlesWidget: (value, meta) {
-                  final index = value.toInt();
-                  if (index < 0 || index >= rows.length) {
-                    return const SizedBox.shrink();
-                  }
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Text(
-                      '${rows[index]['feature']}',
-                      style: const TextStyle(fontSize: 10),
-                    ),
-                  );
-                },
+    final maxMagnitude = topRows
+        .map((row) => (row['value'] as double).abs())
+        .fold<double>(0, math.max);
+
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Theme.of(context).brightness == Brightness.dark
+            ? Colors.white.withOpacity(0.04)
+            : const Color(0xFFF8FAFF),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white.withOpacity(0.08)
+              : const Color(0xFFE3EAF6),
+        ),
+      ),
+      child: Column(
+        children: topRows
+            .map(
+              (row) => Padding(
+                padding: EdgeInsets.only(
+                  bottom: row == topRows.last ? 0 : 14,
+                ),
+                child: _ShapBarRow(
+                  feature: row['feature'] as String,
+                  value: row['value'] as double,
+                  maxMagnitude: maxMagnitude == 0 ? 1 : maxMagnitude,
+                ),
+              ),
+            )
+            .toList(growable: false),
+      ),
+    );
+  }
+}
+
+class _ShapBarRow extends StatelessWidget {
+  const _ShapBarRow({
+    required this.feature,
+    required this.value,
+    required this.maxMagnitude,
+  });
+
+  final String feature;
+  final double value;
+  final double maxMagnitude;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final bool isPositive = value >= 0;
+    final Color labelColor =
+        isPositive ? AppColors.danger : AppColors.success;
+    final double ratio =
+        (value.abs() / maxMagnitude).clamp(0.08, 1.0).toDouble();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                feature,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.onSurface,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
-          ),
-          barGroups: List.generate(rows.length, (index) {
-            final value = (rows[index]['value'] as num?)?.toDouble() ?? 0;
-            final isPositive = value >= 0;
-            return BarChartGroupData(
-              x: index,
-              barRods: [
-                BarChartRodData(
-                  toY: value.abs(),
-                  width: 18,
-                  borderRadius: BorderRadius.circular(6),
-                  color: isPositive ? const Color(0xFFDC2626) : const Color(0xFF16A34A),
+            const SizedBox(width: 12),
+            Text(
+              value.toStringAsFixed(3),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: labelColor,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            return Stack(
+              children: [
+                Container(
+                  height: 18,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).brightness == Brightness.dark
+                        ? Colors.white.withOpacity(0.06)
+                        : const Color(0xFFE9EEF8),
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                ),
+                TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0, end: ratio),
+                  duration: const Duration(milliseconds: 900),
+                  curve: Curves.easeOutCubic,
+                  builder: (context, animatedValue, _) {
+                    return Container(
+                      width: constraints.maxWidth * animatedValue,
+                      height: 18,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: isPositive
+                              ? [
+                                  AppColors.danger,
+                                  AppColors.accentAmber,
+                                ]
+                              : [
+                                  const Color(0xFF34D399),
+                                  AppColors.success,
+                                ],
+                        ),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                    );
+                  },
                 ),
               ],
             );
-          }),
+          },
         ),
-      ),
+      ],
     );
   }
 }

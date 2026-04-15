@@ -6,6 +6,7 @@ import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/splash_screen.dart';
 import 'services/auth_service.dart';
+import 'theme/app_theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,12 +24,63 @@ class UnbiasedAiDecisionApp extends StatelessWidget {
     return MaterialApp(
       title: 'Unbiased AI Decision',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFF59E0B)),
-        scaffoldBackgroundColor: const Color(0xFFF8FAFC),
-        useMaterial3: true,
-      ),
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      themeMode: ThemeMode.system,
+      themeAnimationDuration: const Duration(milliseconds: 350),
+      themeAnimationCurve: Curves.easeOutCubic,
+      builder: (context, child) {
+        return AnimatedSwitcher(
+          duration: const Duration(milliseconds: 250),
+          switchInCurve: Curves.easeOut,
+          switchOutCurve: Curves.easeIn,
+          child: child ?? const SizedBox.shrink(),
+        );
+      },
       home: const _AuthGate(),
+    );
+  }
+}
+
+class _FadeInShell extends StatefulWidget {
+  const _FadeInShell({required this.child});
+
+  final Widget child;
+
+  @override
+  State<_FadeInShell> createState() => _FadeInShellState();
+}
+
+class _FadeInShellState extends State<_FadeInShell>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _opacity;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 320),
+    );
+    _opacity = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOut,
+    );
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _opacity,
+      child: widget.child,
     );
   }
 }
@@ -42,14 +94,14 @@ class _AuthGate extends StatelessWidget {
       stream: AuthService.instance.authStateChanges,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const SplashScreen();
+          return const _FadeInShell(child: SplashScreen());
         }
 
         if (snapshot.data == null) {
-          return const LoginScreen();
+          return const _FadeInShell(child: LoginScreen());
         }
 
-        return const HomeScreen();
+        return const _FadeInShell(child: HomeScreen());
       },
     );
   }
