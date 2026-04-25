@@ -103,8 +103,16 @@ async def upload_audit(
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Could not parse the uploaded CSV.") from exc
 
     prepared_df = _prepare_dataframe(dataframe)
-    detection_result = run_bias_detection(prepared_df)
-    cultural_scan = run_cultural_bias_scan(prepared_df)
+    try:
+        detection_result = run_bias_detection(prepared_df)
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+
+    try:
+        cultural_scan = run_cultural_bias_scan(prepared_df)
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
+
     metrics = metric_payload(detection_result)
 
     audit = Audit(

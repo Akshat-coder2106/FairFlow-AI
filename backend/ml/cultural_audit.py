@@ -16,6 +16,64 @@ INDICASA_DIMENSIONS = [
     "ethnicity",
 ]
 
+POSITIVE_LABEL_TOKENS = {
+    "1",
+    "true",
+    "t",
+    "yes",
+    "y",
+    "hired",
+    "selected",
+    "accept",
+    "accepted",
+}
+NEGATIVE_LABEL_TOKENS = {
+    "0",
+    "false",
+    "f",
+    "no",
+    "n",
+    "rejected",
+    "reject",
+    "not_hired",
+    "not_selected",
+    "declined",
+}
+
+
+def _normalize_label_token(value: Any) -> str:
+    return str(value).strip().lower().replace("-", "_").replace(" ", "_")
+
+
+def _normalize_decision_column(series: pd.Series) -> pd.Series:
+    numeric_series = pd.to_numeric(series, errors="coerce")
+    if numeric_series.notna().all():
+        if not numeric_series.isin([0, 1]).all():
+            invalid_values = sorted(set(numeric_series[~numeric_series.isin([0, 1])].tolist()))[:5]
+            raise ValueError(
+                "Column 'hired' must be binary. Supported values include "
+                "0/1, yes/no, true/false. "
+                f"Found unsupported numeric values: {invalid_values}"
+            )
+        return numeric_series.astype(int)
+
+    normalized_tokens = series.map(_normalize_label_token)
+    mapped = normalized_tokens.map(
+        lambda token: 1
+        if token in POSITIVE_LABEL_TOKENS
+        else 0
+        if token in NEGATIVE_LABEL_TOKENS
+        else pd.NA
+    )
+    if mapped.isna().any():
+        invalid_tokens = sorted(set(normalized_tokens[mapped.isna()].tolist()))[:5]
+        raise ValueError(
+            "Column 'hired' must be binary. Supported values include "
+            "0/1, yes/no, true/false, hired/rejected. "
+            f"Found unsupported values: {invalid_tokens}"
+        )
+    return mapped.astype(int)
+
 
 def _selection_rates(df: pd.DataFrame, attribute: str, decision_column: str) -> dict[str, float]:
     rates: dict[str, float] = {}
@@ -65,7 +123,7 @@ def run_cultural_bias_scan(df: pd.DataFrame, decision_column: str = DECISION_COL
         raise ValueError("Cultural scan requires a decision column.")
 
     normalized = df.copy()
-    normalized[decision_column] = normalized[decision_column].astype(int)
+    normalized[decision_column] = _normalize_decision_column(normalized[decision_column])
     for column in normalized.columns:
         if normalized[column].dtype == object:
             normalized[column] = normalized[column].fillna("Unknown").astype(str).str.strip()

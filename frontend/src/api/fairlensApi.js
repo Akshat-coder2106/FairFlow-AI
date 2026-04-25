@@ -5,6 +5,7 @@ export const TOKEN_STORAGE_KEY = "fairlens_token";
 export const USER_EMAIL_STORAGE_KEY = "fairlens_user_email";
 export const USER_ID_STORAGE_KEY = "fairlens_user_id";
 export const LAST_AUDIT_STORAGE_KEY = "fairlens_last_audit_id";
+export const AUTH_STATE_EVENT = "fairlens:auth-state-changed";
 
 const runtimeHost = typeof window !== "undefined" ? window.location.hostname : "localhost";
 const apiHost = runtimeHost === "127.0.0.1" ? "127.0.0.1" : "localhost";
@@ -12,6 +13,14 @@ const apiHost = runtimeHost === "127.0.0.1" ? "127.0.0.1" : "localhost";
 const api = axios.create({
   baseURL: `http://${apiHost}:8000`
 });
+
+const isAuthRoute = (pathname) => pathname === "/login" || pathname === "/register";
+
+const emitAuthStateChange = () => {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event(AUTH_STATE_EVENT));
+  }
+};
 
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem(TOKEN_STORAGE_KEY);
@@ -26,6 +35,9 @@ api.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       clearSession();
+      if (typeof window !== "undefined" && !isAuthRoute(window.location.pathname)) {
+        window.location.replace("/login");
+      }
     }
     return Promise.reject(error);
   }
@@ -53,6 +65,9 @@ const performRequest = async (request, fallbackMessage) => {
     const response = await request();
     return response.data;
   } catch (error) {
+    if (error?.response?.status === 401) {
+      throw error;
+    }
     toast.error(getErrorMessage(error, fallbackMessage));
     throw error;
   }
@@ -62,6 +77,7 @@ export const persistSession = (tokenData) => {
   localStorage.setItem(TOKEN_STORAGE_KEY, tokenData.access_token);
   localStorage.setItem(USER_EMAIL_STORAGE_KEY, tokenData.user_email);
   localStorage.setItem(USER_ID_STORAGE_KEY, tokenData.user_id);
+  emitAuthStateChange();
 };
 
 export const clearSession = () => {
@@ -69,6 +85,7 @@ export const clearSession = () => {
   localStorage.removeItem(USER_EMAIL_STORAGE_KEY);
   localStorage.removeItem(USER_ID_STORAGE_KEY);
   localStorage.removeItem(LAST_AUDIT_STORAGE_KEY);
+  emitAuthStateChange();
 };
 
 export const register = async (data) =>
