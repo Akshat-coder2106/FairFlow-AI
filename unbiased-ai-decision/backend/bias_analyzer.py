@@ -5,12 +5,16 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
+from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.impute import SimpleImputer
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import brier_score_loss
 from sklearn.neighbors import NearestNeighbors
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder
+
+from sdg_mapping import build_sdg_mapping
 
 try:
     import joblib
@@ -35,6 +39,44 @@ SENSITIVE_CANDIDATES = (
     "zip_code",
 )
 NON_FEATURE_COLUMNS = {"id", "name", "full_name", "candidate_id"}
+DOMAIN_PROFILES: dict[str, dict[str, Any]] = {
+    "hiring": {
+        "keywords": {
+            "resume",
+            "candidate",
+            "hired",
+            "hire",
+            "shortlist",
+            "experience",
+            "university",
+        },
+        "model_family": "hiring_random_forest",
+    },
+    "lending": {
+        "keywords": {
+            "loan",
+            "approved",
+            "credit",
+            "income",
+            "debt",
+            "mortgage",
+            "default",
+        },
+        "model_family": "lending_gradient_boosting",
+    },
+    "care_delivery": {
+        "keywords": {
+            "triage",
+            "patient",
+            "care",
+            "diagnosis",
+            "insurance",
+            "readmission",
+            "severity",
+        },
+        "model_family": "care_delivery_logistic_regression",
+    },
+}
 
 
 def _safe_float(value: Any) -> float:
@@ -42,6 +84,60 @@ def _safe_float(value: Any) -> float:
         return float(value)
     except Exception:
         return 0.0
+
+
+def _infer_domain(df: pd.DataFrame, target_column: str) -> str:
+    tokens = {target_column.lower()}
+    for column in df.columns:
+        tokens.update(part for part in column.lower().replace("-", "_").split("_") if part)
+
+    best_domain = "hiring"
+    best_score = -1
+    for domain, profile in DOMAIN_PROFILES.items():
+        score = len(tokens.intersection(profile["keywords"]))
+        if score > best_score:
+            best_domain = domain
+            best_score = score
+    return best_domain
+
+
+def _build_domain_model(domain: str) -> tuple[Pipeline, str]:
+    if domain == "lending":
+        return (
+            Pipeline(
+                steps=[
+                    ("imputer", SimpleImputer(strategy="median")),
+                    ("model", GradientBoostingClassifier(random_state=42)),
+                ]
+            ),
+            DOMAIN_PROFILES[domain]["model_family"],
+        )
+    if domain == "care_delivery":
+        return (
+            Pipeline(
+                steps=[
+                    ("imputer", SimpleImputer(strategy="median")),
+                    (
+                        "model",
+                        LogisticRegression(
+                            class_weight="balanced",
+                            max_iter=1000,
+                            solver="lbfgs",
+                        ),
+                    ),
+                ]
+            ),
+            DOMAIN_PROFILES[domain]["model_family"],
+        )
+    return (
+        Pipeline(
+            steps=[
+                ("imputer", SimpleImputer(strategy="median")),
+                ("model", RandomForestClassifier(n_estimators=200, random_state=42)),
+            ]
+        ),
+        DOMAIN_PROFILES["hiring"]["model_family"],
+    )
 
 
 def _pick_target_column(df: pd.DataFrame) -> str:
@@ -272,6 +368,95 @@ def _build_causal_graph(
     return {"nodes": deduped_nodes, "edges": edges}, pathway
 
 
+def _row_label(row: pd.Series, row_index: int) -> str:
+    for key in ("candidate_id", "patient_id", "applicant_id", "id", "name", "full_name"):
+        if key in row and str(row[key]).strip():
+            return str(row[key])
+    return f"row-{row_index + 1}"
+
+
+def _build_candidate_flags(
+    normalized: pd.DataFrame,
+    predictions: np.ndarray,
+    probabilities: np.ndarray,
+    protected_binary: np.ndarray,
+    sensitive_column: str,
+    shap_top3: list[str],
+    protected_mapping: dict[int, str],
+) -> list[dict[str, Any]]:
+    flagged: list[dict[str, Any]] = []
+    ranked_indices = np.argsort(probabilities)
+    for row_index in ranked_indices:
+        if len(flagged) >= 5:
+            break
+        if int(predictions[row_index]) == 1 and probabilities[row_index] > 0.35:
+            continue
+        row = normalized.iloc[int(row_index)]
+        group_value = protected_mapping.get(int(protected_binary[row_index]), "Unknown")
+        reasons = [
+            feature
+            for feature in shap_top3
+            if feature in normalized.columns and str(row.get(feature, "")).strip()
+        ][:3]
+        flagged.append(
+            {
+                "row_id": _row_label(row, int(row_index)),
+                "protected_group": group_value,
+                "sensitive_attribute": sensitive_column,
+                "predicted_decision": int(predictions[row_index]),
+                "approval_probability": round(float(probabilities[row_index]), 4),
+                "primary_drivers": reasons,
+                "recommendation_seed": (
+                    "Review this decision with protected-attribute proxies masked "
+                    "and document a human override if qualifications support it."
+                ),
+            }
+        )
+    return flagged
+
+
+def _build_counterfactuals(
+    feature_frame: pd.DataFrame,
+    normalized: pd.DataFrame,
+    predictions: np.ndarray,
+    probabilities: np.ndarray,
+    shap_top3: list[str],
+) -> list[dict[str, Any]]:
+    counterfactuals: list[dict[str, Any]] = []
+    negative_indices = [index for index, prediction in enumerate(predictions) if int(prediction) == 0]
+    for row_index in negative_indices[:5]:
+        row = normalized.iloc[row_index]
+        changes = []
+        for feature in shap_top3:
+            if feature not in feature_frame.columns:
+                continue
+            series = feature_frame[feature].astype(float)
+            current_value = float(feature_frame.iloc[row_index][feature])
+            median_value = float(series.median())
+            if current_value == median_value:
+                continue
+            changes.append(
+                {
+                    "feature": feature,
+                    "current_value": current_value,
+                    "suggested_value": median_value,
+                    "direction": "increase" if median_value > current_value else "decrease",
+                }
+            )
+            if len(changes) == 2:
+                break
+        if not changes:
+            continue
+        counterfactuals.append(
+            {
+                "row_id": _row_label(row, row_index),
+                "current_probability": round(float(probabilities[row_index]), 4),
+                "suggested_changes": changes,
+            }
+        )
+    return counterfactuals
+
+
 def _load_model(model_artifact_path: str | None):
     if not model_artifact_path:
         return None
@@ -289,12 +474,22 @@ def _load_model(model_artifact_path: str | None):
         return None
 
 
-def analyze_bias(dataset_path: str, model_artifact_path: str | None = None) -> dict[str, Any]:
+def analyze_bias(
+    dataset_path: str,
+    model_artifact_path: str | None = None,
+    status_callback: Any | None = None,
+) -> dict[str, Any]:
+    def publish(stage: str, status: str = "processing") -> None:
+        if status_callback is not None:
+            status_callback(stage, status)
+
     dataframe = pd.read_csv(dataset_path)
     dataframe.columns = [column.strip() for column in dataframe.columns]
 
     target_column = _pick_target_column(dataframe)
     sensitive_column = _pick_sensitive_column(dataframe, target_column)
+    domain = _infer_domain(dataframe, target_column)
+    publish("preparing_features")
 
     normalized = dataframe.copy()
     for column in normalized.columns:
@@ -314,23 +509,23 @@ def analyze_bias(dataset_path: str, model_artifact_path: str | None = None) -> d
 
     loaded_model = _load_model(model_artifact_path)
     if loaded_model is None:
-        model = Pipeline(
-            steps=[
-                ("imputer", SimpleImputer(strategy="median")),
-                ("model", RandomForestClassifier(n_estimators=200, random_state=42)),
-            ]
-        )
+        model, model_family = _build_domain_model(domain)
+        publish(f"training_{domain}_model")
         model.fit(feature_frame, labels)
     else:
         model = loaded_model
+        model_family = "uploaded_model_artifact"
 
+    publish("running_predictions")
     predictions = np.asarray(model.predict(feature_frame)).astype(int)
     if hasattr(model, "predict_proba"):
         probabilities = np.asarray(model.predict_proba(feature_frame))[:, -1]
     else:
         probabilities = predictions.astype(float)
 
+    publish("generating_shap")
     shap_values, shap_top3 = _compute_shap_summary(model, feature_frame)
+    publish("building_causal_graph")
     causal_graph_json, causal_pathway = _build_causal_graph(
         feature_frame,
         protected_binary,
@@ -338,6 +533,7 @@ def analyze_bias(dataset_path: str, model_artifact_path: str | None = None) -> d
         sensitive_column,
         shap_top3,
     )
+    publish("computing_fairness_metrics")
     fairness_metrics = _compute_fairness_metrics(
         labels,
         predictions,
@@ -346,8 +542,27 @@ def analyze_bias(dataset_path: str, model_artifact_path: str | None = None) -> d
         feature_frame,
     )
     bias_score = _calculate_bias_score(fairness_metrics)
+    candidate_flags = _build_candidate_flags(
+        normalized,
+        predictions,
+        probabilities,
+        protected_binary,
+        sensitive_column,
+        shap_top3,
+        protected_mapping,
+    )
+    counterfactuals = _build_counterfactuals(
+        feature_frame,
+        normalized,
+        predictions,
+        probabilities,
+        shap_top3,
+    )
 
     return {
+        "domain": domain,
+        "model_family": model_family,
+        "analysis_backend": "local_domain_model",
         "bias_score": bias_score,
         "fairness_metrics": fairness_metrics,
         "shap_values": shap_values,
@@ -364,6 +579,9 @@ def analyze_bias(dataset_path: str, model_artifact_path: str | None = None) -> d
         "target_column": target_column,
         "dataset_name": Path(dataset_path).name,
         "model_loaded_from_artifact": bool(model_artifact_path and loaded_model is not None),
+        "candidate_flags": candidate_flags,
+        "counterfactuals": counterfactuals,
+        "sdg_mapping": build_sdg_mapping(fairness_metrics, domain),
         "row_count": int(len(normalized)),
         "column_count": int(len(normalized.columns)),
         "encoders": encoders,
