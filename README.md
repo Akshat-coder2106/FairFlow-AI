@@ -1,154 +1,160 @@
-# FairFlow AI (FairLens Dashboard)
+# FairFlow AI
 
-FairFlow AI is a privacy-first fairness governance platform for hiring.
-In simple words: it checks whether an AI hiring model is unfair, explains why the bias happened, recommends mitigation, and generates compliance-ready audit evidence.
+FairFlow AI is a full-stack fairness auditing platform for hiring workflows. It lets teams upload hiring outcome CSVs, measure bias metrics, inspect candidate-level explanations, test counterfactual sensitivity, compare mitigation strategies, and export audit-ready PDF reports.
 
-`FairFlow AI` is the platform name used for the Solution Challenge.  
-`FairLens` is the product UI/API implementation in this repository.
+The main application in this repository is the FastAPI + React project in `backend/` and `frontend/`. A separate prototype lives in `unbiased-ai-decision/` and is not required to run the main FairFlow AI app.
 
-![Local Privacy Shield Demo](docs/assets/privacy-shield-demo.gif)
+If you are looking for the Google-stack submission assets mentioned elsewhere in this repository, see [`unbiased-ai-decision/README.md`](unbiased-ai-decision/README.md). That prototype contains the Firebase, Vertex AI, Gemini, Flutter mobile/web app, guest demo flow, SDG 10.3 framing, user tests, impact story, video script, and deployment scaffold.
 
-## 5 Core Pillars (Implemented)
+## What the project does
 
-- [x] **Local-First Privacy Shield (C++/WASM):** PII hashing + precheck in the browser before network upload.
-- [x] **Auditor Agent Memory (LangGraph + retrieval):** policy-aware recommendations using historical audits.
-- [x] **Deep Inspection (Causal + TCAV):** proxy-path discovery and concept-sensitivity outputs.
-- [x] **Differential Privacy + Certificate:** epsilon-controlled report exports and SHA-256 fairness certificate.
-- [x] **Multimodal Governance:** video/audio fairness reasoning logs for interview workflow audits.
+- Uploads hiring datasets and computes fairness metrics on observed outcomes
+- Trains a local model to generate candidate-level SHAP explanations
+- Runs protected-attribute counterfactual checks for individual candidates
+- Stores audits, candidates, mitigation results, memory records, and report certificates in PostgreSQL
+- Compares three mitigation stages: reweighing, prejudice remover, and equalized odds
+- Exports differentially private PDF audit reports and SHA-256 report certificates
+- Supports a browser-side WASM precheck before upload for zero-egress metric validation
+- Exposes governance and deep-inspection APIs for memory-aware recommendations and proxy analysis
 
-## Architecture Snapshot
+## Stack
 
-| Layer | Primary Stack | Role |
-| :--- | :--- | :--- |
-| Edge Privacy | React + C++ WASM | Local PII hashing and fairness precheck (zero raw PII egress) |
-| Core Audit | FastAPI + sklearn/fairlearn/aif360 | Metric computation, mitigation, and candidate-level analysis |
-| Governance Memory | PostgreSQL + LangGraph | Historical audit recall, drift tracking, and policy-aware recommendations |
-| Deep Inspection | DoWhy + TCAV-style translator | Causal proxy discovery and concept-level explainability |
-| Reporting & Trust | Differential privacy + SHA-256 | Noise-protected summaries and immutable certificate ledger |
+- Backend: FastAPI, SQLAlchemy, PostgreSQL, scikit-learn, SHAP, Fairlearn, AIF360, DoWhy, LangGraph
+- Frontend: React 18, Tailwind CSS, Recharts, Headless UI
+- Local precheck: C++/WebAssembly bundle built with Emscripten
+- Containers: Docker Compose
 
-## Features
-
-- FastAPI backend with JWT authentication and PostgreSQL persistence
-- React 18 frontend with responsive dashboard, audit workflow, candidate explorer, and mitigation center
-- Bias metrics powered by scikit-learn, SHAP, aif360, and fairlearn
-- Candidate-level explainability with SHAP waterfall views and proxy-feature flags
-- Counterfactual analysis that tests protected-attribute sensitivity
-- Mitigation pipeline covering reweighing, prejudice remover, and equalized odds post-processing
-- Client-side WASM fairness precheck (C++ core) for zero-egress metric validation before upload
-- Local Privacy Shield that hashes PII columns in-browser before CSV upload
-- LangGraph-based governance auditor agent with historical memory retrieval
-- Deep inspection API using DoWhy causal proxy discovery + TCAV-style concept translation
-- IndiCASA-style cultural scan for caste/religion/disability/region/dialect risk gaps
-- Synthetic counterfactual patch endpoint for active debiasing ("Debias Now")
-- Multimodal audit endpoint for `.mp4`/`.wav` fairness risk screening with reasoning logs
-- Differentially private report export with immutable SHA-256 fairness certificate
-- Downloadable PDF bias audit reports
-- Docker and docker-compose support for local orchestration
-
-## Governance Memory Scalability (AUR-X)
-
-FairLens uses partitioned governance memory retrieval (`M << N`) before vector scoring.  
-This allows historical bias-pattern recall across large enterprise audit corpora (10,000+ audits) with low-latency drift detection and real-time recommendation loops.
-
-## Glass Box UI Proof
-
-- **Concept Sensitivity (TCAV):** Deep inspection outputs concept-level sensitivity (`Leadership`, `EducationPrestige`, `TechnicalDepth`, `OperationalStability`) and exposes them for chart rendering in the dashboard.
-- **Causal Discovery Trace:** `dag_edges` + `proxy_findings` support both node-link visualization and human-readable policy summaries.
-- **Regional Fairness Signal:** The product surfaces IndiCASA-style high-risk dimensions (caste/religion/disability/region/dialect) and includes an **Indic-Bias Certified** badge in the application shell.
-
-## Fairness Definitions
-
-Formal metric definitions are documented in [`docs/fairness-definitions.md`](docs/fairness-definitions.md).
-
-Disparate Impact (`DI`):
-
-\[
-\mathrm{DI} = \frac{P(\hat{Y}=1 \mid D=\mathrm{unprivileged})}{P(\hat{Y}=1 \mid D=\mathrm{privileged})}
-\]
-
-Statistical Parity Difference (`SPD`):
-
-\[
-\mathrm{SPD} = P(\hat{Y}=1 \mid D=\mathrm{unprivileged}) - P(\hat{Y}=1 \mid D=\mathrm{privileged})
-\]
-
-## Prerequisites
-
-- Node.js 18+
-- Python 3.10+
-- PostgreSQL 15+
-- Emscripten (`em++`) for compiling the frontend WASM core (optional but recommended)
-- Docker and Docker Compose
-
-## Project Structure
+## Repository layout
 
 ```text
 FairFlow-AI/
-├── backend/
-├── frontend/
-├── sample_candidates.csv
-├── docker-compose.yml
-├── .env.example
-└── README.md
+|-- backend/
+|-- frontend/
+|-- docs/
+|-- sample_candidates.csv
+|-- docker-compose.yml
+|-- README.md
+`-- unbiased-ai-decision/
 ```
 
-## Setup
+## Dataset format
 
-1. Clone the repository and move into the project directory.
+Uploads must be CSV files with these required columns:
+
+- `name`
+- `gender`
+- `age`
+- `ethnicity`
+- `years_experience`
+- `education_level`
+- `hired`
+
+Optional columns:
+
+- `skills`
+- `previous_companies`
+
+The repository includes [`sample_candidates.csv`](sample_candidates.csv) with 200 records so you can run the full workflow immediately.
+
+## Quick start with Docker
+
+1. Clone the repository and move into the project root.
 
 ```bash
 git clone <your-repo-url>
 cd FairFlow-AI
 ```
 
-2. Create the root environment file for Docker Compose.
+2. Create the root environment file used by Docker Compose.
 
 ```bash
 cp .env.example .env
 ```
 
-3. Create the backend environment file for local FastAPI runs.
+PowerShell equivalent:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+3. Start the full stack.
+
+```bash
+docker compose up --build
+```
+
+4. Open the app:
+
+- Frontend: `http://localhost:3000`
+- Backend health check: `http://localhost:8000/`
+- FastAPI docs: `http://localhost:8000/docs`
+
+Notes:
+
+- PostgreSQL runs on port `5432`
+- Backend tables are created automatically on startup
+- Docker service and database names still use some legacy `fairlens` naming internally
+
+## Local development
+
+### Backend
+
+1. Create the backend environment file.
 
 ```bash
 cp backend/.env.example backend/.env
 ```
 
-4. Start PostgreSQL, the backend, and the frontend with Docker Compose.
+PowerShell equivalent:
 
-```bash
-docker-compose up --build
+```powershell
+Copy-Item backend/.env.example backend/.env
 ```
 
-5. If you want to run the React app directly instead of the containerized frontend, install dependencies and start it.
+2. Install dependencies and run FastAPI.
+
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+On PowerShell, activate the environment with:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+### Frontend
+
+1. Install dependencies and start the React app.
 
 ```bash
 cd frontend
 npm install
-npm run build:wasm
 npm start
 ```
 
-`npm run build:wasm` generates `frontend/public/wasm/ethos_core.js` and `frontend/public/wasm/ethos_core.wasm`.  
-If this step is skipped, the app automatically falls back to a JS runtime for the local precheck.
-
-WASM technical notes: [`docs/ethos-wasm-core.md`](docs/ethos-wasm-core.md)
-Ethos architecture notes: [`docs/ethos-architecture.md`](docs/ethos-architecture.md)
-Compliance mapping: [`docs/ethos-compliance.md`](docs/ethos-compliance.md)
-Security model: [`SECURITY.md`](SECURITY.md)
-
-6. If you want to run the backend directly instead of the containerized backend, create a virtual environment and install dependencies.
+2. Rebuild the WASM precheck bundle only if you need to regenerate it.
 
 ```bash
-cd backend
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn main:app --reload
+npm run build:wasm
 ```
 
-## Environment Variables
+WASM notes:
+
+- `npm run build:wasm` requires Bash plus Emscripten `em++`
+- On Windows, run it from Git Bash or WSL
+- Generated files are written to `frontend/public/wasm/`
+- The repo already includes a built WASM bundle, so the UI can run without rebuilding it
+
+## Environment variables
 
 ### Root `.env`
+
+Used by `docker compose`.
 
 ```env
 DB_URL=postgresql://fairlens:fairlens@postgres:5432/fairlens
@@ -160,6 +166,8 @@ POSTGRES_DB=fairlens
 
 ### `backend/.env`
 
+Used when running the backend directly.
+
 ```env
 DATABASE_URL=postgresql://user:password@localhost:5432/fairlens
 SECRET_KEY=your-secret-key-here
@@ -167,214 +175,7 @@ ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
 ```
 
-## Sample Dataset
-
-The repository includes [sample_candidates.csv](sample_candidates.csv) with 200 seeded records containing intentional hiring bias patterns across gender and ethnicity so you can validate the full workflow immediately.
-
-## API Endpoints
-
-### Health Check
-
-```bash
-curl http://localhost:8000/
-```
-
-### Register
-
-```bash
-curl -X POST http://localhost:8000/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "admin@fairlens.ai",
-    "password": "SecurePass123",
-    "organization": "FairLens Labs"
-  }'
-```
-
-### Login
-
-```bash
-curl -X POST http://localhost:8000/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "admin@fairlens.ai",
-    "password": "SecurePass123"
-  }'
-```
-
-### Upload Audit CSV
-
-```bash
-curl -X POST http://localhost:8000/audit/upload \
-  -H "Authorization: Bearer <JWT_TOKEN>" \
-  -F "file=@sample_candidates.csv"
-```
-
-### Upload Multimodal Artifact (`.mp4` / `.wav`)
-
-```bash
-curl -X POST http://localhost:8000/audit/upload-multimodal \
-  -H "Authorization: Bearer <JWT_TOKEN>" \
-  -F "file=@interview_clip.mp4" \
-  -F "transcript=Candidate discussed village schooling and accent concerns."
-```
-
-### List Audits
-
-```bash
-curl http://localhost:8000/audit/list \
-  -H "Authorization: Bearer <JWT_TOKEN>"
-```
-
-### Get One Audit
-
-```bash
-curl http://localhost:8000/audit/<AUDIT_ID> \
-  -H "Authorization: Bearer <JWT_TOKEN>"
-```
-
-### Get Candidates
-
-```bash
-curl "http://localhost:8000/candidates/<AUDIT_ID>?page=1&page_size=20&search=&bias_status=all" \
-  -H "Authorization: Bearer <JWT_TOKEN>"
-```
-
-### Get Stored SHAP Explanation
-
-```bash
-curl http://localhost:8000/explain/<CANDIDATE_ID> \
-  -H "Authorization: Bearer <JWT_TOKEN>"
-```
-
-### Run Counterfactual
-
-```bash
-curl -X POST http://localhost:8000/counterfactual \
-  -H "Authorization: Bearer <JWT_TOKEN>" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "candidate_id": "<CANDIDATE_ID>"
-  }'
-```
-
-### Run Mitigation
-
-```bash
-curl -X POST http://localhost:8000/mitigate/<AUDIT_ID> \
-  -H "Authorization: Bearer <JWT_TOKEN>"
-```
-
-### Run Synthetic Debias Patch
-
-```bash
-curl -X POST "http://localhost:8000/mitigate/synthetic/<AUDIT_ID>?target_attribute=gender" \
-  -H "Authorization: Bearer <JWT_TOKEN>"
-```
-
-### Download PDF Report
-
-```bash
-curl "http://localhost:8000/report/<AUDIT_ID>?epsilon=1.0" \
-  -H "Authorization: Bearer <JWT_TOKEN>" \
-  --output fairlens_report.pdf
-```
-
-### Run Governance Auditor Agent
-
-```bash
-curl -X POST http://localhost:8000/governance/auditor/<AUDIT_ID> \
-  -H "Authorization: Bearer <JWT_TOKEN>"
-```
-
-### Run Deep Inspection (Causal + TCAV)
-
-```bash
-curl -X POST http://localhost:8000/inspection/deep/<AUDIT_ID> \
-  -H "Authorization: Bearer <JWT_TOKEN>"
-```
-
-### Get Latest Fairness Certificate
-
-```bash
-curl http://localhost:8000/certificate/<AUDIT_ID> \
-  -H "Authorization: Bearer <JWT_TOKEN>"
-```
-
-## Sample Bias Report JSON
-
-```json
-{
-  "audit": {
-    "id": "d3744c84-6f65-4977-a931-c3b54084f61a",
-    "user_id": "802b7192-4a8f-4c09-9962-c6af4bb55014",
-    "created_at": "2026-04-14T10:28:01.418588",
-    "dataset_name": "sample_candidates.csv",
-    "total_candidates": 200,
-    "disparate_impact": 0.6174,
-    "stat_parity_diff": -0.2181,
-    "equal_opp_diff": -0.1649,
-    "avg_odds_diff": -0.1337,
-    "bias_detected": true,
-    "mitigation_applied": false,
-    "fairness_score": 0,
-    "flagged_candidates": 67,
-    "gender_hire_rates": {
-      "Female": 0.41,
-      "Male": 0.67
-    },
-    "ethnicity_hire_rates": {
-      "Asian": 0.69,
-      "Black": 0.39,
-      "Hispanic": 0.37,
-      "White": 0.63
-    }
-  },
-  "metrics": {
-    "disparate_impact": 0.6174,
-    "stat_parity_diff": -0.2181,
-    "equal_opp_diff": -0.1649,
-    "avg_odds_diff": -0.1337,
-    "pass_flags": {
-      "disparate_impact": false,
-      "stat_parity_diff": false,
-      "equal_opp_diff": false,
-      "avg_odds_diff": false
-    }
-  },
-  "summary": {
-    "total_candidates": 200,
-    "bias_flags": 67,
-    "proxy_flags": 19,
-    "fairness_score": 0
-  }
-}
-```
-
-## Sample Multimodal Reasoning Log
-
-```json
-{
-  "analysis_engine": "gemini-adapter-fallback",
-  "media_type": "video",
-  "file_name": "interview_round2.mp4",
-  "risk_score": 76,
-  "flagged_concerns": [
-    {
-      "type": "socioeconomic_proxy_bias",
-      "severity": "high",
-      "detail": "Interview context may over-weight non-job-relevant environment cues."
-    }
-  ],
-  "reasoning_log": [
-    "Bias Detected: Socioeconomic Proxy. The candidate's background contains visual markers of a non-standard office environment (shared room).",
-    "Culture-fit score dropped near timestamp 02:14 while technical answer quality stayed stable.",
-    "Likely proxy effect: environment marker correlated with ranking change, not Python decorator explanation quality."
-  ]
-}
-```
-
-## Frontend Routes
+## Frontend routes
 
 - `/login`
 - `/register`
@@ -383,26 +184,96 @@ curl http://localhost:8000/certificate/<AUDIT_ID> \
 - `/candidates/:auditId`
 - `/mitigate/:auditId`
 
-## Notes
+## API overview
 
-- The backend creates tables automatically on startup.
-- The candidate explorer stores both SHAP results and counterfactual outputs in PostgreSQL.
-- Mitigation results update `mitigated_decision` values for the audited candidates.
-- The included dataset is intentionally biased so the dashboard and mitigation flow show meaningful deltas immediately.
+Authentication:
 
-## Cloud Run Demo Mode (Judge-Friendly)
+- `POST /auth/register`
+- `POST /auth/login`
 
-For competition demos, deploy with a pre-seeded managed database and expose a one-click guest path:
-- preload one audited dataset + mitigation snapshots,
-- issue a short-lived demo token,
-- skip manual database setup during judge evaluation.
+Audit workflow:
 
-Recommended presentation mode for causal discovery:
-- **Primary:** node-link DAG view for `protected_attribute -> proxy_feature -> hiring_outcome`.
-- **Secondary:** textual summary that explains the top proxy path and policy impact in plain language.
+- `POST /audit/upload`
+- `GET /audit/list`
+- `GET /audit/{audit_id}`
 
-## References
+Candidate review:
 
-- IBM AI Fairness 360 (AIF360): [https://github.com/Trusted-AI/AIF360](https://github.com/Trusted-AI/AIF360)
-- Google Vertex AI documentation: [https://cloud.google.com/vertex-ai/docs](https://cloud.google.com/vertex-ai/docs)
-- IndiCASA (IIT Madras, 2025): Intersectional benchmark for Indian-context hiring fairness (`caste`, `religion`, `disability`, `region`, `dialect`) used in FairLens cultural-risk modeling.
+- `GET /candidates/{audit_id}`
+- `GET /explain/{candidate_id}`
+- `POST /counterfactual`
+
+Mitigation and reporting:
+
+- `POST /mitigate/{audit_id}`
+- `GET /report/{audit_id}`
+- `GET /certificate/{audit_id}`
+
+Advanced analysis:
+
+- `POST /governance/auditor/{audit_id}`
+- `POST /inspection/deep/{audit_id}`
+
+## Example API flow
+
+Register:
+
+```bash
+curl -X POST http://localhost:8000/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "admin@fairflow.ai",
+    "password": "SecurePass123",
+    "organization": "FairFlow Labs"
+  }'
+```
+
+Login:
+
+```bash
+curl -X POST http://localhost:8000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "admin@fairflow.ai",
+    "password": "SecurePass123"
+  }'
+```
+
+Upload an audit:
+
+```bash
+curl -X POST http://localhost:8000/audit/upload \
+  -H "Authorization: Bearer <JWT_TOKEN>" \
+  -F "file=@sample_candidates.csv"
+```
+
+Run mitigation:
+
+```bash
+curl -X POST http://localhost:8000/mitigate/<AUDIT_ID> \
+  -H "Authorization: Bearer <JWT_TOKEN>"
+```
+
+Download the report:
+
+```bash
+curl "http://localhost:8000/report/<AUDIT_ID>?epsilon=1.0" \
+  -H "Authorization: Bearer <JWT_TOKEN>" \
+  --output fairflow_report.pdf
+```
+
+## Project notes
+
+- Baseline fairness metrics are calculated from the uploaded `hired` outcomes
+- A trained Random Forest model is used for SHAP explanations and counterfactual generation
+- Candidate-level counterfactuals test whether changing protected attributes changes the model decision
+- Running a report also stores a certificate that can later be fetched from `/certificate/{audit_id}`
+- The current UI focuses on dashboard, audit upload, candidate review, and mitigation; deep inspection is available through the backend API
+
+## Additional docs
+
+- [Ethos architecture notes](docs/ethos-architecture.md)
+- [WASM core notes](docs/ethos-wasm-core.md)
+- [Compliance mapping](docs/ethos-compliance.md)
+- [API contracts](docs/ethos-api-contracts.md)
+- [Agent prompts](docs/ethos-agent-prompts.md)

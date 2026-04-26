@@ -211,7 +211,7 @@ def download_report(
     document = SimpleDocTemplate(buffer, pagesize=letter)
     styles = getSampleStyleSheet()
     story = [
-        Paragraph("FairLens AI Bias Audit Report", styles["Title"]),
+        Paragraph("FairFlow AI Bias Audit Report", styles["Title"]),
         Spacer(1, 12),
     ]
 
@@ -334,10 +334,7 @@ def download_report(
     db.commit()
     buffer.seek(0)
 
-    headers = {
-        "Content-Disposition": f'attachment; filename="{audit.dataset_name.rsplit(".", 1)[0]}_fairlens_report.pdf"',
-        "X-Audit-Certificate": report_hash,
-    }
+    headers = {"Content-Disposition": f'attachment; filename="{audit.dataset_name.rsplit(".", 1)[0]}_fairflow_report.pdf"'}
     return StreamingResponse(buffer, media_type="application/pdf", headers=headers)
 
 

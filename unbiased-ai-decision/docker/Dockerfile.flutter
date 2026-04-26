@@ -1,0 +1,19 @@
+FROM ghcr.io/cirruslabs/flutter:3.24.2 AS build
+
+ARG FLUTTER_API_BASE_URL=http://localhost:8080
+
+WORKDIR /app/flutter-app
+
+COPY flutter-app/pubspec.yaml ./
+RUN flutter config --enable-web && flutter pub get
+
+COPY flutter-app/ ./
+RUN flutter build web --release --dart-define=FLUTTER_API_BASE_URL=${FLUTTER_API_BASE_URL}
+
+FROM nginx:1.27-alpine
+
+COPY --from=build /app/flutter-app/build/web /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
