@@ -266,7 +266,6 @@ def _metricframe_payload(
     }
     selection_values = list(by_group["selection_rate"].astype(float))
     tpr_values = list(by_group["true_positive_rate"].astype(float))
-    fpr_values = list(by_group["false_positive_rate"].astype(float))
 
     best_selection = max(selection_values) if selection_values else 0.0
     worst_selection = min(selection_values) if selection_values else 0.0
@@ -280,8 +279,8 @@ def _metricframe_payload(
         right_tpr = float(by_group.loc[right_group, "true_positive_rate"])
         left_fpr = float(by_group.loc[left_group, "false_positive_rate"])
         right_fpr = float(by_group.loc[right_group, "false_positive_rate"])
-        pair_diff = 0.5 * ((left_fpr - right_fpr) + (left_tpr - right_tpr))
-        if abs(pair_diff) > abs(avg_odds_diff):
+        pair_diff = abs(0.5 * ((left_fpr - right_fpr) + (left_tpr - right_tpr)))
+        if pair_diff > avg_odds_diff:
             avg_odds_diff = pair_diff
 
     raw_metrics = {
