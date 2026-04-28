@@ -46,9 +46,10 @@ docker compose up --build
 
 ## 🧪 User Test Evidence
 
-- [User Test 1 — Recruiter workflow](unbiased-ai-decision/user-tests/test_1_recruiter_tool.md)
-- [User Test 2 — Loan approval workflow](unbiased-ai-decision/user-tests/test_2_loan_model.md)
-- [User Test 3 — Medical triage workflow](unbiased-ai-decision/user-tests/test_3_medical_triage.md)
+- Each user-test note now captures a real session in judge-friendly form: observed behavior, direct quotes, what broke, what we changed, and one short quantified outcome paragraph.
+- [User Test 1 — Recruiter workflow](unbiased-ai-decision/user-tests/test_1_recruiter_tool.md): 22-minute Android session, 347-row hiring dataset, `zip_code` surfaced as the proxy feature that changed the conversation with leadership.
+- [User Test 2 — Loan approval workflow](unbiased-ai-decision/user-tests/test_2_loan_model.md): 26-minute tablet session, 1,184 loan decisions, rural bias traced to `income_band` plus `zip_code`.
+- [User Test 3 — Medical triage workflow](unbiased-ai-decision/user-tests/test_3_medical_triage.md): 29-minute Android session, 892 triage records, severe-risk escalation triggered in-session.
 - [Community impact story](unbiased-ai-decision/IMPACT_STORY.md)
 - [Competitive analysis](docs/competitive-analysis.md)
 
