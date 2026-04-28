@@ -8,9 +8,10 @@ ARG FIREBASE_PROJECT_ID=unbiased-ai-demo
 ARG FIREBASE_AUTH_DOMAIN=unbiased-ai-demo.firebaseapp.com
 ARG FIREBASE_STORAGE_BUCKET=unbiased-ai-demo.appspot.com
 
+ENV CI=true
 WORKDIR /app/flutter-app
 
-COPY flutter-app/pubspec.yaml ./
+COPY flutter-app/pubspec.yaml flutter-app/pubspec.lock ./
 RUN flutter config --enable-web && flutter pub get
 
 COPY flutter-app/ ./
